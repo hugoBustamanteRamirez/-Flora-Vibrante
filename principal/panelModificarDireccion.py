@@ -33,9 +33,9 @@ class PanelModificarDireccion(tk.Frame):
         tk.Button(self, text="Cancelar", command=self.cancelar_modificacion).pack(pady=5)
 
     def modificar_direccion(self):
-        nueva_direccion = self.entry_direccion.get()
+        nuevaDireccion = self.entry_direccion.get()
 
-        if not nueva_direccion:
+        if not nuevaDireccion:
             messagebox.showerror("Dirección faltante", "Por favor ingresa una dirección.")
             return
 
@@ -45,12 +45,12 @@ class PanelModificarDireccion(tk.Frame):
             
             for compra in self.compras:
                 if compra.usuario.nombre == usuario_seleccionado:
-                    compra.usuario.set_direc(nueva_direccion)
+                    compra.usuario.set_nuevaDireccion(nuevaDireccion)
                     break
             messagebox.showinfo("Dirección modificada", f"La dirección de {usuario_seleccionado} ha sido modificada.")
         else:
             # Si no es admin, cambiar solo la dirección de ese usuario
-            self.usuario.set_direc(nueva_direccion)
+            self.usuario.set_direc(nuevaDireccion)
             messagebox.showinfo("Dirección modificada", "Tu dirección de envío ha sido modificada.")
 
         from principal.panelMostrarCompras import PanelMostrarCompras

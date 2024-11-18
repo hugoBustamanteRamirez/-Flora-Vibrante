@@ -6,7 +6,7 @@ class PanelCuentaUsuario(tk.Frame):
     def __init__(self, parent, usuario_logueado):
         super().__init__(parent)
         self.usuario_logueado = usuario_logueado
-        self.configure(bg="#d6c9b1")  # Fondo color claro
+        self.configure(bg="#d6c9b1") 
 
         tk.Label(self, text="Mi Cuenta", font=("Arial", 16), bg="#d6c9b1").pack(pady=10)
 

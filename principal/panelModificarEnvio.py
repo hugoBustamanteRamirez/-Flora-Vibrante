@@ -52,7 +52,7 @@ class PanelModificarEstadoEnvio(tk.Frame):
 
             # Modificar estado de envío
             if self.usuario.rol == 1:  # Si es admin, puede cambiar el estado
-                estado_combobox = ttk.Combobox(self.compras_frame, values=["En proceso de envío", "Enviado", "Entregado"], state="readonly")
+                estado_combobox = ttk.Combobox(self.compras_frame, values=["En proceso de envío","Pago REcibido","etc", "Enviado", "Entregado"], state="readonly")
                 estado_combobox.set(estado_envio)  # Establecer el valor actual
                 estado_combobox.grid(row=row_num, column=5, padx=10, pady=5)
                 button = tk.Button(self.compras_frame, text="Actualizar", command=lambda compra=compra, estado_combobox=estado_combobox: self.actualizar_estado(compra, estado_combobox))

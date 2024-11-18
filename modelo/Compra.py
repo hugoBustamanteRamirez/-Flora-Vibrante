@@ -1,5 +1,5 @@
 class Compra:
-    def __init__(self, usuario, producto,nuevaDireccion,cant=0,total=0,edoEnvio="En proceso de envío"):
+    def __init__(self, usuario, producto,nuevaDireccion,cant=0,total=0,edoEnvio=""):
         self.usuario = usuario  
         self.producto = producto  
         self.edoEnvio = edoEnvio
@@ -39,7 +39,7 @@ class Compra:
     
     
     def set_edoEnvio(self, set_edoEnvio):
-        self.set_edoEnvio = set_edoEnvio
+        self.edoEnvio = set_edoEnvio
     
     
 

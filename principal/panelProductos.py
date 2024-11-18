@@ -11,7 +11,6 @@ class PanelProductos(tk.Frame):
         
         self.configure(bg="#d6c9b1")
 
-        # Configuración del canvas y scrollbar
         self.canvas = Canvas(self, bg="#d6c9b1")
         self.scrollable_frame = tk.Frame(self.canvas, bg="#d6c9b1")
         
@@ -28,15 +27,12 @@ class PanelProductos(tk.Frame):
         self.canvas.pack(side="left", fill="both", expand=True)
         self.scrollbar.pack(side="right", fill="y")
 
-        # Título del panel
         title_label = tk.Label(self.scrollable_frame, text="Lista de Productos", font=("Arial", 16), bg="#d6c9b1")
         title_label.pack(pady=10)
 
-        # Marco para los productos
         self.productos_frame = tk.Frame(self.scrollable_frame, bg="#d6c9b1")
         self.productos_frame.pack(expand=True, fill="both")
 
-        # Mostrar los productos
         self.mostrar_productos()
 
     def mostrar_productos(self):
@@ -78,7 +74,7 @@ class PanelProductos(tk.Frame):
                     img = ImageTk.PhotoImage(img)
 
                     imagen_label = tk.Label(caja, image=img, bg="#ffffff")
-                    imagen_label.image = img  # Evitar que Python elimine la imagen
+                    imagen_label.image = img  # Evitar que elimine la imagen
                     imagen_label.pack(pady=5)
                 except Exception:
                     tk.Label(caja, text="Error al cargar imagen", bg="#ffffff", font=("Arial", 10)).pack(pady=5)

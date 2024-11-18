@@ -7,6 +7,7 @@ class PanelMostrarProductos(tk.Frame):
         super().__init__(parent)
         self.productos = productos 
         self.configure(bg="#d6c9b1") 
+        
 
         title_label = tk.Label(self, text="Lista de Productos", font=("Arial", 16))
         title_label.pack(pady=10)
@@ -16,9 +17,10 @@ class PanelMostrarProductos(tk.Frame):
 
         btn_agregar_producto = tk.Button(self, text="Agregar Producto", command=self.agregar_producto)
         btn_agregar_producto.pack(pady=20)
-
+        
         self.mostrar_productos()
 
+    
     def mostrar_productos(self):
         """
         Muestra todos los productos en un formato de filas y columnas.

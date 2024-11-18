@@ -111,26 +111,22 @@ class MainApp(tk.Tk):
         self.current_panel.pack(expand=True, fill="both")
     
     def crear_menu(self):
-    # Elimina el menú actual si existe
         self.config(menu=None)
         
         if self.usuario_logueado is None:
-            return  # No hay usuario logueado, no se muestra ningún menú
-        
-        # Crear un nuevo menú
+            return 
         menubar = tk.Menu(self, background='#e8bf30', foreground='white', 
                         activebackground='#333333', activeforeground='white')
         self.config(menu=menubar)
         
-        if self.usuario_logueado.rol == 1:  # Menú para admin
+        if self.usuario_logueado.rol == 1: 
             self.crear_menu_admin(menubar)
-        else:  # Menú para usuario normal
+        else:  
             self.crear_menu_usuario(menubar)
             print("Creando menú para usuario normal")
 
 
     def crear_menu_admin(self, menubar):
-        # Menú para administrar usuarios
         menu_usuarios = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Usuarios 👤", menu=menu_usuarios)
         menu_usuarios.add_command(label="Registrar nuevo usuario ✅", command=lambda: self.show_panel(PanelRegistrarUsuario))
@@ -138,7 +134,6 @@ class MainApp(tk.Tk):
         menu_usuarios.add_command(label="Eliminar usuario ❌", command=lambda: self.show_panel(PanelEliminarUsuario))
         menu_usuarios.add_separator()
         
-        # Menú para administrar productos
         menu_productos = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Productos 🌹🌹", menu=menu_productos)
         menu_productos.add_command(label="Registrar nuevo producto ✅", command=lambda: self.show_panel(PanelRegistrarProducto))
@@ -146,14 +141,12 @@ class MainApp(tk.Tk):
         menu_productos.add_command(label="Eliminar producto ❌", command=lambda: self.show_panel(PanelEliminarProducto))
         menu_productos.add_separator()
         
-        # Menú para compras
         menu_compras = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
-        menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelRealizarCompra))
+        menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
         menu_compras.add_command(label="Modificar direccion del envio ✅", command=lambda: self.show_panel(PanelModificarEstadoEnvio))
-        menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
+        #menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
         menu_compras.add_command(label="Ver mis pedidos 📓", command=lambda: self.show_panel(PanelMostrarCompras))
-         # Menú para perfil del usuario
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Mi Perfil", menu=menu_usuario)
         menu_usuario.add_command(label="Mi saldo",command=lambda:self.show_panel(PanelCuentaUsuario))
@@ -162,7 +155,6 @@ class MainApp(tk.Tk):
 
 
     def crear_menu_usuario(self, menubar):
-        # Menú para productos
         menu_compras = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
         menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
@@ -170,7 +162,6 @@ class MainApp(tk.Tk):
         menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
        
         
-        # Menú para perfil del usuario
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Mi Perfil", menu=menu_usuario)
         menu_usuario.add_command(label="Mi saldo",command=lambda:self.show_panel(PanelCuentaUsuario))
@@ -180,9 +171,9 @@ class MainApp(tk.Tk):
     
        
     def on_login_success(self, user):
-        self.usuario_logueado = user  # Guarda el usuario logueado
-        self.crear_menu()  # Actualiza el menú basado en el rol
-        self.show_panel(PanelRegistrarCmpra, self.productos, self.usuario_logueado)  # Muestra el panel predeterminado
+        self.usuario_logueado = user  
+        self.crear_menu()  
+        self.show_panel(PanelRegistrarCmpra, self.productos, self.usuario_logueado)  
         messagebox.showinfo("Login exitoso", f"Bienvenido, {user.get_nombre()}")
         print(f"Rol del usuario logueado: {user.rol}")
         producto_seleccionado = self.productos[0]
