@@ -51,7 +51,8 @@ class PanelRegistrarUsuario(tk.Frame):
             messagebox.showwarning("Campos vacíos", "Todos los campos son obligatorios.")
             return
 
-        nuevo_usuario = Usuario(nombre, contraseña, direccion, rol=rol)
+        nuevo_usuario = Usuario(nombre, contraseña, direccion, "5540500001000004","12/25","938",400,rol=rol)
+        
         self.usuarios.append(nuevo_usuario)
         messagebox.showinfo("Usuario registrado", f"Usuario {nombre} registrado exitosamente.")
 

@@ -60,7 +60,7 @@ class PanelEliminarProducto(tk.Frame):
             producto_seleccionado = self.lista_productos.get(seleccion[0])
 
             
-            nombre_producto = producto_seleccionado.split(" - ")[0]  # Extraemos solo el nombre
+            nombre_producto = producto_seleccionado.split(" - ")[0]  
             producto_a_eliminar = None
 
             for producto in self.productos:
