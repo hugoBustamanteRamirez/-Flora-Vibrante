@@ -3,9 +3,12 @@ from tkinter import Canvas, Scrollbar
 from PIL import Image, ImageTk
 
 class PanelProductos(tk.Frame):
-    def __init__(self, parent, productos):
+    def __init__(self, parent, productos,usuario):
         super().__init__(parent)
+        
         self.productos = productos
+        self.usuario=usuario
+        
         self.configure(bg="#d6c9b1")
 
         # Configuración del canvas y scrollbar
@@ -94,7 +97,8 @@ class PanelProductos(tk.Frame):
                 font=("Arial", 10, "bold"), 
                 bg="#4CAF50", 
                 fg="white", 
-                command=lambda p=producto: self.comprar_producto(p)
+                command=lambda p=producto, u=self.usuario: self.comprar_producto(p, u)
+
             )
             comprar_btn.pack(pady=10)
             comprar_btn.bind("<Enter>", lambda e, btn=comprar_btn: btn.configure(bg="#e08167"))
@@ -107,11 +111,26 @@ class PanelProductos(tk.Frame):
     def hover_salir(self, widget):
         
         widget.configure(bg="#ffffff", borderwidth=2)
-    def comprar_producto(self, producto):
+    def comprar_producto(self, producto, usuario):
         """
         Acción al hacer clic en el botón "Comprar".
         """
-        # Aquí puedes implementar la lógica para agregar el producto al carrito o realizar una compra
         print(f"Producto comprado: {producto.nombre}")
-        tk.messagebox.showinfo("Compra exitosa", f"Has comprado {producto.nombre} por ${producto.precio:.2f}")    
+        
+        # Asignar el producto y el usuario al master (puedes revisar si es necesario)
+        self.master.producto_seleccionado = producto
+        self.master.usuario_actual = usuario
+
+        # Importar el panel correspondiente
+        from principal.panelRealizarCompra import PanelRealizarCompra
+        
+        # Crear la instancia del panel y pasar los parámetros necesarios
+        #panel_realizar_compra = PanelRealizarCompra(self.master, producto, usuario, self.master.compras)
+        
+        # Mostrar el panel
+        #self.show_panel(PanelRealizarCompra, self.master.producto_seleccionado, self.usuario_logueado, self.compras)
+        self.master.show_panel(PanelRealizarCompra, producto, usuario, self.master.compras)
+
+
+
 

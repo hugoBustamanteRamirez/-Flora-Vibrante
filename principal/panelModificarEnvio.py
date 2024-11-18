@@ -1,0 +1,68 @@
+import tkinter as tk
+from tkinter import messagebox, ttk
+from modelo.Compra import Compra  
+class PanelModificarEstadoEnvio(tk.Frame):
+    def __init__(self, parent, compras, usuario):
+        super().__init__(parent)
+        self.compras = compras
+        self.usuario = usuario
+
+        self.configure(bg="#f4f4f9")
+
+        title_label = tk.Label(self, text="Modificar Estado de Envío", font=("Arial", 16, "bold"), bg="#d6c9b1", padx=20, pady=10)
+        title_label.pack(pady=10)
+
+        self.compras_frame = tk.Frame(self, bg="#d6c9b1")
+        self.compras_frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+        columnas = ["Usuario", "Producto", "Cantidad", "Precio Total", "Estado Envío", "Modificar Estado"]
+        for col_num, columna in enumerate(columnas):
+            label = tk.Label(self.compras_frame, text=columna, font=("Arial", 12, "bold"), bg="#d6c9b1", anchor="w", width=20)
+            label.grid(row=0, column=col_num, padx=5, pady=10, sticky="w")
+
+        self.mostrar_compras()
+
+    def mostrar_compras(self):
+        """
+        Muestra todas las compras en formato de filas y columnas con más detalles.
+        """
+        for widget in self.compras_frame.winfo_children():
+            if widget.grid_info().get("row") > 0:
+                widget.destroy()
+
+        if self.usuario.rol == 1:  # Si es admin, mostrar todas las compras
+            compras_a_mostrar = self.compras
+        else:  # Si es usuario normal, mostrar solo sus compras
+            compras_a_mostrar = [compra for compra in self.compras if compra.usuario == self.usuario]
+
+        # Mostrar las compras
+        for row_num, compra in enumerate(compras_a_mostrar, start=1):
+            usuario_nombre = compra.get_usuario().nombre
+            producto_nombre = compra.get_producto().nombre
+            cantidad = compra.get_cant()
+            precio_total = compra.get_producto().precio * cantidad
+            estado_envio = compra.get_edoEnvio()
+
+            # Mostrar los datos de la compra
+            tk.Label(self.compras_frame, text=usuario_nombre, font=("Arial", 12), bg="#d6c9b1", anchor="w").grid(row=row_num, column=0, padx=10, pady=5, sticky="w")
+            tk.Label(self.compras_frame, text=producto_nombre, font=("Arial", 12), bg="#d6c9b1", anchor="w").grid(row=row_num, column=1, padx=10, pady=5, sticky="w")
+            tk.Label(self.compras_frame, text=cantidad, font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=2, padx=10, pady=5)
+            tk.Label(self.compras_frame, text=f"${precio_total:.2f}", font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=3, padx=10, pady=5)
+            tk.Label(self.compras_frame, text=estado_envio, font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=4, padx=10, pady=5)
+
+            # Modificar estado de envío
+            if self.usuario.rol == 1:  # Si es admin, puede cambiar el estado
+                estado_combobox = ttk.Combobox(self.compras_frame, values=["En proceso de envío", "Enviado", "Entregado"], state="readonly")
+                estado_combobox.set(estado_envio)  # Establecer el valor actual
+                estado_combobox.grid(row=row_num, column=5, padx=10, pady=5)
+                button = tk.Button(self.compras_frame, text="Actualizar", command=lambda compra=compra, estado_combobox=estado_combobox: self.actualizar_estado(compra, estado_combobox))
+                button.grid(row=row_num, column=6, padx=10, pady=5)
+            else:
+                # Si no es admin, mostrar solo el estado
+                tk.Label(self.compras_frame, text="No editable", font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=5, padx=10, pady=5)
+
+    def actualizar_estado(self, compra, estado_combobox):
+        """Actualiza el estado de envío de la compra"""
+        nuevo_estado = estado_combobox.get()
+        compra.set_edoEnvio(nuevo_estado)  # Actualizar el estado de envío de la compra
+        messagebox.showinfo("Estado actualizado", f"El estado de envío de {compra.get_producto().nombre} ha sido actualizado a {nuevo_estado}.")

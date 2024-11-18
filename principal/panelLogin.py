@@ -49,12 +49,14 @@ class PanelLogin(tk.Frame):
                 if usuario.isAdmin():
                     #messagebox.showinfo("Login exitoso", f"Bienvenido, {usuario.get_nombre()}!")
                     self.on_login_success(usuario)
-                    self.main_app.show_panel(PanelProductos)  
+                    self.main_app.show_panel(PanelProductos)
+
                     #self.main_app.crear_menu()
                     return
                 else:
                     self.on_login_success(usuario)
-                    self.main_app.show_panel(PanelProductos)  
+                    self.main_app.show_panel(PanelProductos)
+  
                     return
         
         messagebox.showerror("Error de Login", "Usuario o contraseña incorrectos")

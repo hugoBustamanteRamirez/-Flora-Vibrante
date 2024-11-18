@@ -18,6 +18,9 @@ from principal.panelModificarProductos import PanelModificarProducto
 from principal.panelRegistrarCompra import PanelRegistrarCmpra
 from principal.panelMostrarCompras import PanelMostrarCompras
 from principal.panelCuentaUsuario import PanelCuentaUsuario
+from principal.panelRealizarCompra import PanelRealizarCompra
+from principal.panelModificarDireccion import PanelModificarDireccion
+from principal.panelModificarEnvio import PanelModificarEstadoEnvio
 
 
 class MainApp(tk.Tk):
@@ -28,10 +31,13 @@ class MainApp(tk.Tk):
         screen_height = self.winfo_screenheight()
         self.geometry(f"{screen_width}x{screen_height}")
         self.usuario_logueado = None
+        self.producto_seleccionado = None
+        self.usuario_actual = None
+
         
         self.usuarios = [
             Usuario("admin", "1234","La joya ", "9876 5432 1098 7654", "11/23", "456",3000,rol=1),
-            Usuario("karol", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",20,rol=0,),
+            Usuario("karol", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",200,rol=0,),
             Usuario("yo", "1234", "el povorin",rol=0)
         ]
         self.productos = [
@@ -48,18 +54,15 @@ class MainApp(tk.Tk):
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg"),
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg")
         ]
-        self.compras=[]
-
-       
-
-        
-        
+        self.compras=[
+           
+        ]
         self.current_panel = None
          
         self.show_panel(PanelLogin) 
         
 
-    def show_panel(self, panel_class,*args):
+    def show_panel(self, panel_class,*args, **kwargs):
        
         if self.current_panel:
             self.current_panel.pack_forget()
@@ -71,7 +74,7 @@ class MainApp(tk.Tk):
         elif panel_class == PanelLogin:
             self.current_panel = panel_class(self, self, self.usuarios, self.on_login_success)
         elif panel_class == PanelProductos:
-            self.current_panel = panel_class(self, self.productos)
+            self.current_panel = panel_class(self, self.productos,self.usuario_logueado)
         elif panel_class == PanelRegistrarUsuario:
             self.current_panel = panel_class(self, self.usuarios)
         elif panel_class == PanelEliminarUsuario:
@@ -80,7 +83,11 @@ class MainApp(tk.Tk):
             self.current_panel = panel_class(self, self.usuarios)
         elif panel_class == PanelRegistrarProducto:
             self.current_panel = panel_class(self, self.productos)
-        
+        elif panel_class == PanelModificarEstadoEnvio:
+            self.current_panel = panel_class(self, self.compras, self.usuario_logueado)
+        elif panel_class == PanelModificarDireccion:
+            self.current_panel = panel_class(self, self.compras, self.usuario_logueado)
+
         elif panel_class == PanelMostrarProductos:
             self.current_panel = panel_class(self, self.productos)
         elif panel_class == PanelEliminarProducto:
@@ -89,12 +96,15 @@ class MainApp(tk.Tk):
             self.current_panel = panel_class(self, self.productos)
         elif panel_class == PanelRegistrarCmpra:
             self.current_panel = panel_class(self, self.productos,self.usuario_logueado)
+        elif panel_class == PanelRealizarCompra:
+            self.current_panel = panel_class(self,*args)
         elif panel_class == PanelCuentaUsuario:
             self.current_panel = panel_class(self,self.usuario_logueado)
         elif panel_class == PanelMostrarCompras:
-            self.current_panel = panel_class(self, self.compras)
+            self.current_panel = panel_class(self, self.compras, self.usuario_logueado)
+   
         else:
-            self.current_panel = panel_class(self, *args)
+            self.current_panel = panel_class(self, *args, **kwargs)
 
         
 
@@ -139,7 +149,9 @@ class MainApp(tk.Tk):
         # Menú para compras
         menu_compras = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
-        menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelRegistrarCmpra))
+        menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelRealizarCompra))
+        menu_compras.add_command(label="Modificar direccion del envio ✅", command=lambda: self.show_panel(PanelModificarEstadoEnvio))
+        menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
         menu_compras.add_command(label="Ver mis pedidos 📓", command=lambda: self.show_panel(PanelMostrarCompras))
          # Menú para perfil del usuario
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
@@ -155,6 +167,8 @@ class MainApp(tk.Tk):
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
         menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
         menu_compras.add_command(label="Ver mis pedidos 📓", command=lambda: self.show_panel(PanelMostrarCompras))
+        menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
+       
         
         # Menú para perfil del usuario
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
@@ -171,6 +185,12 @@ class MainApp(tk.Tk):
         self.show_panel(PanelRegistrarCmpra, self.productos, self.usuario_logueado)  # Muestra el panel predeterminado
         messagebox.showinfo("Login exitoso", f"Bienvenido, {user.get_nombre()}")
         print(f"Rol del usuario logueado: {user.rol}")
+        producto_seleccionado = self.productos[0]
+        #self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado)  # Muestra el panel de compra
+        #self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras)
+        self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras)
+
+   
 
 
     def logout(self):
