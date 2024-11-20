@@ -24,10 +24,7 @@ class PanelRegistrarProducto(tk.Frame):
         self.cajaPrecio = tk.Entry(self)
         self.cajaPrecio.pack(fill="x", padx=10, pady=5)
 
-        tk.Label(self, text="Fecha de entrega:").pack(anchor="w", padx=10)
-        self.cajaFechaEntrega = tk.Entry(self)
-        self.cajaFechaEntrega.pack(fill="x", padx=10, pady=5)
-
+        
         self.imagen_path = None  
         self.btnSeleccionarImagen = tk.Button(self, text="Seleccionar Imagen", command=self.seleccionar_imagen)
         self.btnSeleccionarImagen.pack(pady=10)
@@ -57,7 +54,6 @@ class PanelRegistrarProducto(tk.Frame):
         """
         nombre = self.cajaNombre.get()
         descripcion = self.cajaDescripcion.get()
-        fechatentativa=self.cajaFechaEntrega.get()
         
         try:
             precio = float(self.cajaPrecio.get())
@@ -75,7 +71,7 @@ class PanelRegistrarProducto(tk.Frame):
                                   nombre=nombre, 
                                   descripcion=descripcion, 
                                   precio=precio, 
-                                  fechatentativa=fechatentativa, 
+                                  fechatentativa="1 o 2 dias", 
                                   imagen_path=self.imagen_path)
         self.productos.append(nuevo_producto)
         
@@ -84,7 +80,6 @@ class PanelRegistrarProducto(tk.Frame):
         self.cajaNombre.delete(0, tk.END)
         self.cajaDescripcion.delete(0, tk.END)
         self.cajaPrecio.delete(0, tk.END)
-        self.cajaFechaEntrega.delete(0, tk.END)
         self.lblImagen.config(text="No se ha seleccionado imagen")
 
     def cancelar(self):
@@ -94,7 +89,6 @@ class PanelRegistrarProducto(tk.Frame):
         self.cajaNombre.delete(0, tk.END)
         self.cajaDescripcion.delete(0, tk.END)
         self.cajaPrecio.delete(0, tk.END)
-        self.cajaFechaEntrega.delete(0, tk.END)
         self.lblImagen.config(text="No se ha seleccionado imagen")
         from principal.panelProductos import PanelProductos
         self.master.show_panel(PanelProductos) 

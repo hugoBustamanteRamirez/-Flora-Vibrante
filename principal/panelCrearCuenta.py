@@ -78,7 +78,7 @@ class PanelCrearCuenta(tk.Frame):
         if len(cvv) != 3 or not cvv.isdigit():
             messagebox.showerror("Error de validación", "Cvv incorrecto, debe tener al menos 3 digitos.")
             return
-        nuevo_usuario = Usuario(nombre, contraseña, direccion,numero_tarjeta, fecha_vencimiento, cvv,500, rol=rol)
+        nuevo_usuario = Usuario(nombre, contraseña, direccion,numero_tarjeta, fecha_vencimiento, cvv,7000, rol=rol)
         self.usuarios.append(nuevo_usuario)
         messagebox.showinfo("Usuario registrado", f"Usuario {nombre} registrado exitosamente.")
 
@@ -99,7 +99,7 @@ class PanelCrearCuenta(tk.Frame):
         self.cajaNombre.delete(0, tk.END)
         self.cajaContrasena.delete(0, tk.END)
         self.cajaDireccion.delete(0, tk.END)
-        self.rol_var.set(0)
+        #self.rol_var.set(0)
     
     def Cancelar(self) :
         

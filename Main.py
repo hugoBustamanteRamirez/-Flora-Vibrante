@@ -36,8 +36,8 @@ class MainApp(tk.Tk):
 
         
         self.usuarios = [
-            Usuario("admin", "1234","La joya ", "9876 5432 1098 7654", "11/23", "456",3000,rol=1),
-            Usuario("karol", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",200,rol=0,),
+            Usuario("admin", "1234","La joya ", "9876 5432 1098 7654", "11/23", "456",7000,rol=1),
+            Usuario("karol", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",7000,rol=0,),
             Usuario("yo", "1234", "el povorin",rol=0)
         ]
         self.productos = [
@@ -46,17 +46,14 @@ class MainApp(tk.Tk):
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/brisa_lila.jpg"),
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/dulce_encanto.jpg"),
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/nostalgia_otono.jpg"),
-            Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg"),
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/paraiso_azul.jpg"),
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/sol_y_nieve.jpg"),
-            Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg"),
-            Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg"),
-            Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg"),
-            Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/suenio_primaveral.jpg")
-        ]
+               ]
         self.compras=[
-           
-        ]
+              Compra(usuario=self.usuarios[1],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
+              Compra(usuario=self.usuarios[0],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
+
+         ]
         self.current_panel = None
          
         self.show_panel(PanelLogin) 
@@ -113,17 +110,21 @@ class MainApp(tk.Tk):
     def crear_menu(self):
         self.config(menu=None)
         
-        if self.usuario_logueado is None:
-            return 
+        #if self.usuario_logueado is None:
+         #   return 
         menubar = tk.Menu(self, background='#e8bf30', foreground='white', 
                         activebackground='#333333', activeforeground='white')
         self.config(menu=menubar)
         
         if self.usuario_logueado.rol == 1: 
             self.crear_menu_admin(menubar)
-        else:  
+        elif self.usuario_logueado.rol == 0:  
             self.crear_menu_usuario(menubar)
             print("Creando menú para usuario normal")
+        else:
+            self.crear_menu_usuario(menubar)
+            print("Creando menú")
+
 
 
     def crear_menu_admin(self, menubar):
@@ -144,12 +145,12 @@ class MainApp(tk.Tk):
         menu_compras = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
         menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
-        menu_compras.add_command(label="Modificar direccion del envio ✅", command=lambda: self.show_panel(PanelModificarEstadoEnvio))
+        menu_compras.add_command(label="Modificar estado del envio ✅", command=lambda: self.show_panel(PanelModificarEstadoEnvio))
         #menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
         menu_compras.add_command(label="Ver mis pedidos 📓", command=lambda: self.show_panel(PanelMostrarCompras))
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Mi Perfil", menu=menu_usuario)
-        menu_usuario.add_command(label="Mi saldo",command=lambda:self.show_panel(PanelCuentaUsuario))
+        menu_usuario.add_command(label="Mis datos de facturacion",command=lambda:self.show_panel(PanelCuentaUsuario))
        
         menu_usuario.add_command(label="Cerrar sesión", command=self.logout)
 
@@ -159,12 +160,12 @@ class MainApp(tk.Tk):
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
         menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
         menu_compras.add_command(label="Ver mis pedidos 📓", command=lambda: self.show_panel(PanelMostrarCompras))
-        menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
+        #menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
        
         
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Mi Perfil", menu=menu_usuario)
-        menu_usuario.add_command(label="Mi saldo",command=lambda:self.show_panel(PanelCuentaUsuario))
+        menu_usuario.add_command(label="Mis datos de facturacion",command=lambda:self.show_panel(PanelCuentaUsuario))
         menu_usuario.add_command(label="Cerrar sesión", command=self.logout)
 
        
@@ -181,7 +182,9 @@ class MainApp(tk.Tk):
         #self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras)
         self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras)
 
-   
+    def ivitado(self):
+        self.crear_menu()  
+        
 
 
     def logout(self):

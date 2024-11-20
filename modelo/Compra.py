@@ -1,11 +1,12 @@
 class Compra:
-    def __init__(self, usuario, producto,nuevaDireccion,cant=0,total=0,edoEnvio=""):
+    def __init__(self, usuario, producto,nuevaDireccion,cant=0,total=0,edoEnvio="",imagen_path=None):
         self.usuario = usuario  
         self.producto = producto  
         self.edoEnvio = edoEnvio
         self.nuevaDireccion=nuevaDireccion
         self.cant=cant
         self.total=total
+        self.imagen_path = imagen_path if imagen_path else producto.imagen_path
 
     def get_usuario(self):
         """Devuelve el usuario que realizó la compra."""

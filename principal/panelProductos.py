@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import Canvas, Scrollbar
 from PIL import Image, ImageTk
 
+from tkinter import messagebox
 class PanelProductos(tk.Frame):
     def __init__(self, parent, productos,usuario):
         super().__init__(parent)
@@ -43,14 +44,13 @@ class PanelProductos(tk.Frame):
             widget.destroy()
 
         columnas = 3  # Número de columnas
-        espacio_columna = 20  # Espacio entre columnas
+        espacio_columna = 90  # Espacio entre columnas
         max_width = self.winfo_toplevel().winfo_width()  # Ancho de la ventana principal
-        tarjeta_width = 200  # Ancho estimado de cada tarjeta
+        tarjeta_width = 350  # Ancho estimado de cada tarjeta
         total_width = columnas * (tarjeta_width + espacio_columna)  # Ancho ocupado por las tarjetas y espacios
 
         # Calcular el padding para centrar las tarjetas
         padding_left = max((max_width - total_width) // 2, 10)
-
         self.productos_frame.grid_columnconfigure(0, minsize=padding_left)  # Espaciado a la izquierda
         for col in range(1, columnas + 1):
             self.productos_frame.grid_columnconfigure(col, weight=1, minsize=tarjeta_width)
@@ -76,7 +76,7 @@ class PanelProductos(tk.Frame):
                     imagen_label = tk.Label(caja, image=img, bg="#ffffff")
                     imagen_label.image = img  # Evitar que elimine la imagen
                     imagen_label.pack(pady=5)
-                except Exception:
+                except Exception :
                     tk.Label(caja, text="Error al cargar imagen", bg="#ffffff", font=("Arial", 10)).pack(pady=5)
             else:
                 tk.Label(caja, text="Sin imagen", bg="#ffffff", font=("Arial", 10)).pack(pady=5)
@@ -84,7 +84,7 @@ class PanelProductos(tk.Frame):
             # Información del producto
             tk.Label(caja, text=producto.nombre, font=("Arial", 12, "bold"), bg="#ffffff").pack(pady=5)
             tk.Label(caja, text=f"Precio: ${producto.precio:.2f}", font=("Arial", 10), bg="#ffffff").pack()
-            tk.Label(caja, text=f"Stock: {producto.fechatentativa}", font=("Arial", 10), bg="#ffffff").pack()
+            tk.Label(caja, text=f"fECHA ESTIMADA: {producto.fechatentativa}", font=("Arial", 10), bg="#ffffff").pack()
             tk.Label(caja, text=producto.descripcion, font=("Arial", 10), bg="#ffffff", wraplength=150).pack(pady=5)
             # Botón "Comprar"
             comprar_btn = tk.Button(
@@ -93,7 +93,9 @@ class PanelProductos(tk.Frame):
                 font=("Arial", 10, "bold"), 
                 bg="#4CAF50", 
                 fg="white", 
-                command=lambda p=producto, u=self.usuario: self.comprar_producto(p, u)
+                #command=lambda p=producto, u=self.usuario: self.comprar_producto(p, u)
+                command=lambda p=producto, u=self.usuario: self.verificar_usuario_y_comprar(p, u)  # Llamar a la nueva función
+          
 
             )
             comprar_btn.pack(pady=10)
@@ -107,10 +109,18 @@ class PanelProductos(tk.Frame):
     def hover_salir(self, widget):
         
         widget.configure(bg="#ffffff", borderwidth=2)
-    def comprar_producto(self, producto, usuario):
+    def verificar_usuario_y_comprar(self, producto, usuario):
         """
-        Acción al hacer clic en el botón "Comprar".
+        Verifica si el usuario está logueado. Si no lo está, muestra el panel de inicio de sesión.
         """
+        if usuario is None:
+            from principal.panelLogin import PanelLogin
+            messagebox.showwarning("Inicia sesión", "Debes iniciar sesión")
+            self.master.show_panel(PanelLogin)
+        else:
+            self.comprar_producto(producto, usuario)
+    
+    def comprar_producto(self, producto, usuario):    
         print(f"Producto comprado: {producto.nombre}")
         
         # Asignar el producto y el usuario al master (puedes revisar si es necesario)

@@ -39,6 +39,11 @@ class PanelLogin(tk.Frame):
                                  padx=20, pady=5, command=lambda: self.main_app.show_panel(PanelCrearCuenta))
         start_button.place(relx=0.5, rely=0.6, anchor="w")
 
+        start_button = tk.Button(self, text="invitado", font=("Arial", 12), bg="#cccccc", fg="#333333",
+                                 padx=20, pady=5, command=lambda: self.main_app.show_panel(PanelProductos))
+        start_button.place(relx=0.5, rely=0.67, anchor="n")
+
+
     def validar_login(self):
         nombre_usuario = self.name_usuario.get()
         contrasena_usuario = self.pass_usuario.get()
@@ -56,12 +61,30 @@ class PanelLogin(tk.Frame):
                 else:
                     self.on_login_success(usuario)
                     self.main_app.show_panel(PanelProductos)
+                    
   
                     return
+        #self.invitado()        
         
         messagebox.showerror("Error de Login", "Usuario o contraseña incorrectos")
 
 
+def invitado(self):
+    # Mostrar menú para invitados
+    self.crear_menu(rol="invitado")
+    
+    # Crear botón para el modo invitado
+    start_button = tk.Button(
+        self,
+        text="Continuar como invitado",
+        font=("Arial", 12),
+        bg="#cccccc",
+        fg="#333333",
+        padx=20,
+        pady=5,
+        command=lambda: self.main_app.show_panel(PanelProductos),
+    )
+    start_button.place(relx=0.5, rely=0.6, anchor="w")
 def load_background(root, img_path):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()

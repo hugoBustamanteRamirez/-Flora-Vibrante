@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
-from modelo.Compra import Compra  
+from tkinter import messagebox, ttk,simpledialog
+from modelo.Compra import Compra 
+
 class PanelModificarEstadoEnvio(tk.Frame):
     def __init__(self, parent, compras, usuario):
         super().__init__(parent)
@@ -19,6 +20,7 @@ class PanelModificarEstadoEnvio(tk.Frame):
         for col_num, columna in enumerate(columnas):
             label = tk.Label(self.compras_frame, text=columna, font=("Arial", 12, "bold"), bg="#d6c9b1", anchor="w", width=20)
             label.grid(row=0, column=col_num, padx=5, pady=10, sticky="w")
+
 
         self.mostrar_compras()
 
@@ -64,5 +66,20 @@ class PanelModificarEstadoEnvio(tk.Frame):
     def actualizar_estado(self, compra, estado_combobox):
         """Actualiza el estado de envío de la compra"""
         nuevo_estado = estado_combobox.get()
-        compra.set_edoEnvio(nuevo_estado)  # Actualizar el estado de envío de la compra
-        messagebox.showinfo("Estado actualizado", f"El estado de envío de {compra.get_producto().nombre} ha sido actualizado a {nuevo_estado}.")
+
+        # Si el estado seleccionado es "Entregado", pedir confirmación
+        if nuevo_estado == "Entregado":
+            confirmar = simpledialog.askstring("Confirmar estado", "¿Quién recibió el paquete?")
+            
+            if confirmar:  # Si el usuario ingresó un nombre
+                compra.set_edoEnvio(nuevo_estado+"Recibido por "+confirmar)  # Actualizar el estado de envío
+
+                #compra.set_quien_recibio(confirmar)  # Guardar el nombre de la persona que recibió el paquete
+
+                messagebox.showinfo("Estado actualizado", f"La compra ha sido marcada como entregada. Recibido por: {confirmar}")
+            else:
+                messagebox.showwarning("Entrada requerida", "Debes ingresar el nombre de la persona que recibió el paquete.")
+                estado_combobox.set(compra.get_edoEnvio())  # Volver a establecer el estado original
+        else:
+            compra.set_edoEnvio(nuevo_estado)  # Actualizar el estado de envío
+            messagebox.showinfo("Estado actualizado", f"El estado de envío de {compra.get_producto().nombre} ha sido actualizado a {nuevo_estado}.")
