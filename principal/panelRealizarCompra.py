@@ -59,7 +59,6 @@ class PanelRealizarCompra(tk.Frame):
         self.entry_ciudad = tk.Entry(self, width=40)
         self.entry_ciudad.pack(pady=5)
         
-         # Combobox para seleccionar el estado
           # Combobox para seleccionar el país
         self.pais_combobox = ttk.Combobox(self, state="readonly")
         self.pais_combobox.pack(pady=10)
