@@ -43,12 +43,8 @@ class PanelRealizarCompra(tk.Frame):
         self.entry_codigo_postal.pack(pady=5)
         self.entry_codigo_postal.bind("<KeyRelease>", lambda event: self.mostrar_informacion_postal(event))
 
-        self.label_pais = tk.Label(self, text="País: ")
-        self.label_pais.pack(pady=10)
-
-        # Combobox para seleccionar el país
-        self.pais_combobox = ttk.Combobox(self, state="readonly")
-        self.pais_combobox.pack(pady=10)
+        
+       
         # Otros campos
         tk.Label(self, text="Colonia:", bg="#d6c9b1").pack(pady=5)
         self.entry_colonia = tk.Entry(self, width=40)
@@ -60,6 +56,9 @@ class PanelRealizarCompra(tk.Frame):
         self.entry_ciudad.pack(pady=5)
         
           # Combobox para seleccionar el país
+        self.label_pais = tk.Label(self, text="País: ")
+        self.label_pais.pack(pady=10)
+  
         self.pais_combobox = ttk.Combobox(self, state="readonly")
         self.pais_combobox.pack(pady=10)
         self.pais_combobox.bind("<<ComboboxSelected>>", self.actualizar_estados)  # Asociar evento de selección
