@@ -1,0 +1,12 @@
+=== TICKET DE COMPRA ===
+ID de la compra: 3
+Fecha: 2024-11-21 08:34:37
+Usuario: karol
+Producto: paraiso azul
+Cantidad: 1
+Precio unitario: $34.00
+Total: $34.00
+Dirección de envío:
+wqeqwe, weqwe, CDMX,  , CP: 61661
+Estado de envío: 
+========================

@@ -14,83 +14,75 @@ class PanelRealizarCompra(tk.Frame):
         self.usuario = usuario  # Asignar directamente el usuario
        
         self.configure(bg="#d6c9b1")
+        # Título
+        tk.Label(self, text="Confirmar Compra", font=("Arial", 16), bg="#d6c9b1").grid(row=0, column=0, columnspan=2, pady=10)
 
-        tk.Label(self, text="Confirmar Compra", font=("Arial", 16), bg="#d6c9b1").pack(pady=10)
+        # Producto
+        tk.Label(self, text=f"Producto: {producto.nombre}", bg="#d6c9b1").grid(row=1, column=0, sticky="e", pady=5, padx=5)
+        self.precio_label = tk.Label(self, text=f"Precio: ${producto.precio:.2f}", bg="#d6c9b1")
+        self.precio_label.grid(row=1, column=1, sticky="w", pady=5, padx=5)
 
-        tk.Label(self, text=f"Producto: {producto.nombre}", bg="#d6c9b1").pack(pady=5)
-        self.precio_label =tk.Label(self, text=f"Precio: ${producto.precio:.2f}", bg="#d6c9b1")
-        self.precio_label.pack(pady=5)
-
-          # Mostrar información inicial
+        # Método de pago
         self.numeroTarjeta_var = tk.StringVar(value=f"Realizar compra con la tarjeta: {usuario.numero_tarjeta}")
+        tk.Label(self, text="Método de Pago:", bg="#d6c9b1").grid(row=2, column=0, sticky="e", pady=5, padx=5)
         self.numeroTarjeta_label = tk.Label(self, textvariable=self.numeroTarjeta_var, bg="#d6c9b1")
-        self.numeroTarjeta_label.pack(pady=5)
+        self.numeroTarjeta_label.grid(row=2, column=1, sticky="w", pady=5, padx=5)
+        tk.Button(self, text="Cambiar método de pago", command=self.cambiarMetodo).grid(row=3, column=0, columnspan=2, pady=10)
 
-        tk.Button(self, text="Cambiar método de pago", command=self.cambiarMetodo).pack(pady=10)
-  
-        
-
-          # Spinner para seleccionar la cantidad
-        self.cantidad_var = tk.IntVar(value=1)  # Valor inicial
-        tk.Label(self, text="Cantidad:", bg="#d6c9b1").pack(pady=5)
+        # Cantidad
+        tk.Label(self, text="Cantidad:", bg="#d6c9b1").grid(row=4, column=0, sticky="e", pady=5, padx=5)
+        self.cantidad_var = tk.IntVar(value=1)
         self.spinbox_cantidad = tk.Spinbox(self, from_=1, to=100, textvariable=self.cantidad_var, width=5)
-        self.spinbox_cantidad.pack(pady=5)
+        self.spinbox_cantidad.grid(row=4, column=1, sticky="w", pady=5, padx=5)
 
-        
-
-           # Crear campos para la dirección de envío
-        tk.Label(self, text="Codigo Postal:", bg="#d6c9b1").pack(pady=5)
-
-        # Código Postal
+        # Dirección de envío
+        tk.Label(self, text="Código Postal:", bg="#d6c9b1").grid(row=5, column=0, sticky="e", pady=5, padx=5)
         self.entry_codigo_postal = tk.Entry(self, width=40)
-        self.entry_codigo_postal.pack(pady=5)
+        self.entry_codigo_postal.grid(row=5, column=1, sticky="w", pady=5, padx=5)
         self.entry_codigo_postal.bind("<KeyRelease>", lambda event: self.mostrar_informacion_postal(event))
 
-        
-       
-        # Otros campos
-        tk.Label(self, text="Colonia:", bg="#d6c9b1").pack(pady=5)
+        tk.Label(self, text="Colonia:", bg="#d6c9b1").grid(row=6, column=0, sticky="e", pady=5, padx=5)
         self.entry_colonia = tk.Entry(self, width=40)
-        self.entry_colonia.pack(pady=5)
-        tk.Label(self, text="Ciudad:", bg="#d6c9b1").pack(pady=5)
-        
+        self.entry_colonia.grid(row=6, column=1, sticky="w", pady=5, padx=5)
 
+        tk.Label(self, text="Ciudad:", bg="#d6c9b1").grid(row=7, column=0, sticky="e", pady=5, padx=5)
         self.entry_ciudad = tk.Entry(self, width=40)
-        self.entry_ciudad.pack(pady=5)
-        
-          # Combobox para seleccionar el país
-        self.label_pais = tk.Label(self, text="País: ")
-        self.label_pais.pack(pady=10)
-  
+        self.entry_ciudad.grid(row=7, column=1, sticky="w", pady=5, padx=5)
+
+        # País y estado
+            # Combobox para seleccionar el país
+        #self.label_pais = tk.Label(self, text="País: ")
+        #elf.label_pais.pack(pady=10)
+        self.label_pais = tk.Label(self, text="", bg="#d6c9b1")
+        self.label_pais.grid(row=8, column=1, sticky="e", pady=5,padx=(200, 5))
+
+
+        tk.Label(self, text="País:", bg="#d6c9b1").grid(row=8, column=0, sticky="e", pady=5, padx=5)
         self.pais_combobox = ttk.Combobox(self, state="readonly")
-        self.pais_combobox.pack(pady=10)
-        self.pais_combobox.bind("<<ComboboxSelected>>", self.actualizar_estados)  # Asociar evento de selección
+        self.pais_combobox.grid(row=8, column=1, sticky="w", pady=5,  padx=(5, 10))
+        self.pais_combobox.bind("<<ComboboxSelected>>", self.actualizar_estados)
 
-        tk.Label(self, text="Estado:", bg="#d6c9b1").pack(pady=5)       
+        tk.Label(self, text="Estado:", bg="#d6c9b1").grid(row=9, column=0, sticky="e", pady=5, padx=5)
         self.estado_combobox = ttk.Combobox(self, state="readonly")
-        self.estado_combobox.pack(pady=10)
-        tk.Label(self, text="Quien lompra?:", bg="#d6c9b1").pack(pady=5)
-        
+        self.estado_combobox.grid(row=9, column=1, sticky="w", pady=5, padx=5)
 
-        self.entry_ciudad = tk.Entry(self, width=40)
-        self.entry_ciudad.pack(pady=5)
-        tk.Label(self, text="Quien recibe:", bg="#d6c9b1").pack(pady=5)
-        
+        # Comprador y receptor
+        tk.Label(self, text="¿Quién compra?:", bg="#d6c9b1").grid(row=10, column=0, sticky="e", pady=5, padx=5)
+        self.entry_comprador = tk.Entry(self, width=40)
+        self.entry_comprador.grid(row=10, column=1, sticky="w", pady=5, padx=5)
 
-        self.entry_ciudad = tk.Entry(self, width=40)
-        self.entry_ciudad.pack(pady=5)
-       
-       
+        tk.Label(self, text="¿Quién recibe?:", bg="#d6c9b1").grid(row=11, column=0, sticky="e", pady=5, padx=5)
+        self.entry_receptor = tk.Entry(self, width=40)
+        self.entry_receptor.grid(row=11, column=1, sticky="w", pady=5, padx=5)
 
+        # Botones
+        self.aceptar = tk.Button(self, text="Confirmar Compra", command=self.realizar_compra)
+        self.aceptar.grid(row=12, column=0, pady=10, padx=5)
+        tk.Button(self, text="Cancelar", command=self.cancelar_compra).grid(row=12, column=1, pady=10, padx=5)
 
-
-
-
-
-        self.aceptar=tk.Button(self, text="Confirmar Compra", command=self.realizar_compra)
-        self.aceptar.pack(pady=10)
-        tk.Button(self, text="Cancelar", command=self.cancelar_compra).pack(pady=5)
+        # Actualización del precio
         self.cantidad_var.trace("w", self.actualizar_precio)
+
         #self.numeroTarjeta.trace("w",self.actualizar_precio)
 
         self.paises = {
@@ -130,7 +122,7 @@ class PanelRealizarCompra(tk.Frame):
             pais = "Por el momento solo contamos con entregas a Alemania, Francia, Reino Unido, USA, México."
             self.actualizar_estados()
 
-        self.label_pais.config(text=f"País: {pais}")    
+        self.label_pais.config(text=f" {pais}")    
 
 
     def actualizar_estados(self, event=None):
