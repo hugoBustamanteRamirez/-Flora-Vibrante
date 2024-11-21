@@ -1,0 +1,11 @@
+=== TICKET DE COMPRA ===
+Fecha: 2024-11-20 21:33:39
+Usuario: karol
+Producto: paraiso azul
+Cantidad: 1
+Precio unitario: $34.00
+Total: $34.00
+Dirección de envío:
+sdas, wdqw, Zúrich, , CP: 008
+Estado de envío: 
+========================

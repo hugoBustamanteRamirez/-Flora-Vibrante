@@ -1,5 +1,7 @@
 class Compra:
-    def __init__(self, usuario, producto,nuevaDireccion,cant=0,total=0,edoEnvio="",imagen_path=None):
+
+    def __init__(self,id_compra, usuario, producto,nuevaDireccion,cant=0,total=0,edoEnvio="",imagen_path=None):
+        self.id_compra=id_compra
         self.usuario = usuario  
         self.producto = producto  
         self.edoEnvio = edoEnvio
@@ -7,6 +9,15 @@ class Compra:
         self.cant=cant
         self.total=total
         self.imagen_path = imagen_path if imagen_path else producto.imagen_path
+
+    def get_idcompra(self):
+        """Devuelve el usuario que realizó la compra."""
+        return self.id_compra
+
+    def get_idcompra(self):
+        """Devuelve el producto que fue comprado."""
+        return self.id_compra
+    
 
     def get_usuario(self):
         """Devuelve el usuario que realizó la compra."""

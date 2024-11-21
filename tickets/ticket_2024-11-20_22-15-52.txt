@@ -1,0 +1,11 @@
+=== TICKET DE COMPRA ===
+Fecha: 2024-11-20 22:15:52
+Usuario: pepe
+Producto: paraiso azul
+Cantidad: 1
+Precio unitario: $34.00
+Total: $34.00
+Dirección de envío:
+12312, 21312, CDMX, , CP: 61231
+Estado de envío: 
+========================

@@ -1,0 +1,11 @@
+=== TICKET DE COMPRA ===
+Fecha: 2024-11-20 20:30:38
+Usuario: hugo Bustamante ramirez
+Producto: paraiso azul
+Cantidad: 1
+Precio unitario: $34.00
+Total: $34.00
+Dirección de envío:
+asad, qweqw, CDMX, , CP: 61500
+Estado de envío: 
+========================

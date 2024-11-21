@@ -21,7 +21,7 @@ from principal.panelCuentaUsuario import PanelCuentaUsuario
 from principal.panelRealizarCompra import PanelRealizarCompra
 from principal.panelModificarDireccion import PanelModificarDireccion
 from principal.panelModificarEnvio import PanelModificarEstadoEnvio
-
+from principal.panelTickets import PanelTickets
 
 class MainApp(tk.Tk):
     def __init__(self):
@@ -42,7 +42,8 @@ class MainApp(tk.Tk):
         self.usuarios = [
             Usuario("admin", "1234","La joya ", "9876 5432 1098 7654", "11/23", "456",7000,rol=1),
             Usuario("karol", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",7000,rol=0,),
-            Usuario("yo", "1234", "el povorin",rol=0)
+            Usuario("pepe", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",7000,rol=0,),
+           # Usuario("yo", "1234", "el povorin",7000,rol=0)
         ]
         self.productos = [
             Producto("123456789", "Amacener","Rosa rosa rosa rosa  ", 45,"Envio en 1 o2 dias","img/suenio_primaveral.jpg"),
@@ -54,8 +55,8 @@ class MainApp(tk.Tk):
             Producto("123456777", "brisa lila", "Rosa rosa rosa rosa ",90,"Envio en 1 o2 dias","img/sol_y_nieve.jpg"),
                ]
         self.compras=[
-              Compra(usuario=self.usuarios[1],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
-              Compra(usuario=self.usuarios[0],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
+              Compra("123456789",usuario=self.usuarios[1],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
+              Compra("123456789",usuario=self.usuarios[0],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
 
          ]
         #inicializamos nuestra variable  self.current_panel por que esta cambiara a lo largo de la ejecucion 
@@ -89,6 +90,8 @@ class MainApp(tk.Tk):
             self.current_panel = panel_class(self, self.compras, self.usuario_logueado)
         elif panel_class == PanelModificarDireccion:
             self.current_panel = panel_class(self, self.compras, self.usuario_logueado)
+        elif panel_class == PanelTickets:
+            self.current_panel = panel_class(self, self.usuario_logueado)
 
         elif panel_class == PanelMostrarProductos:
             self.current_panel = panel_class(self, self.productos)
@@ -150,7 +153,7 @@ class MainApp(tk.Tk):
         
         menu_compras = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Realizar una compra 🛒", menu=menu_compras)
-        menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
+        #menu_compras.add_command(label="Registrar compra ✅", command=lambda: self.show_panel(PanelProductos))
         menu_compras.add_command(label="Modificar estado del envio ✅", command=lambda: self.show_panel(PanelModificarEstadoEnvio))
         #menu_compras.add_command(label="Modificar direccion  ✅", command=lambda: self.show_panel(PanelModificarDireccion))
         menu_compras.add_command(label="Ver mis pedidos 📓", command=lambda: self.show_panel(PanelMostrarCompras))
@@ -172,6 +175,7 @@ class MainApp(tk.Tk):
         menu_usuario = tk.Menu(menubar, tearoff=0, background='#1a1a1a', foreground='white', font=('Arial', 14))
         menubar.add_cascade(label="Mi Perfil", menu=menu_usuario)
         menu_usuario.add_command(label="Mis datos de facturacion",command=lambda:self.show_panel(PanelCuentaUsuario))
+        menu_usuario.add_command(label="Mis tickets",command=lambda:self.show_panel(PanelTickets))
         menu_usuario.add_command(label="Cerrar sesión", command=self.logout)
 
        

@@ -1,0 +1,11 @@
+=== TICKET DE COMPRA ===
+Fecha: 2024-11-20 21:55:43
+Usuario: karol
+Producto: brisa lila
+Cantidad: 1
+Precio unitario: $90.00
+Total: $90.00
+Dirección de envío:
+wqeqw, weqweq, CDMX, , CP: 612222
+Estado de envío: 
+========================

@@ -4,6 +4,7 @@ from modelo.Compra import Compra
 from tkinter import simpledialog, messagebox
 import os
 from datetime import datetime
+import re
 #from principal.panelProductos import producto_seleccionado, usuario_actual
 class PanelRealizarCompra(tk.Frame):
     def __init__(self, parent,producto, usuario,compras):
@@ -65,10 +66,21 @@ class PanelRealizarCompra(tk.Frame):
         self.pais_combobox.pack(pady=10)
         self.pais_combobox.bind("<<ComboboxSelected>>", self.actualizar_estados)  # Asociar evento de selección
 
-        tk.Label(self, text="Estado:", bg="#d6c9b1").pack(pady=5)
-        
+        tk.Label(self, text="Estado:", bg="#d6c9b1").pack(pady=5)       
         self.estado_combobox = ttk.Combobox(self, state="readonly")
         self.estado_combobox.pack(pady=10)
+        tk.Label(self, text="Quien lompra?:", bg="#d6c9b1").pack(pady=5)
+        
+
+        self.entry_ciudad = tk.Entry(self, width=40)
+        self.entry_ciudad.pack(pady=5)
+        tk.Label(self, text="Quien recibe:", bg="#d6c9b1").pack(pady=5)
+        
+
+        self.entry_ciudad = tk.Entry(self, width=40)
+        self.entry_ciudad.pack(pady=5)
+       
+       
 
 
 
@@ -171,7 +183,7 @@ class PanelRealizarCompra(tk.Frame):
         
 
         # Crear una nueva compra y agregarla a la lista de compras
-        nueva_compra = Compra(self.usuario, self.producto, nuevaDireccion=direccion, cant=cantidad, imagen_path=self.producto.imagen_path)
+        nueva_compra = Compra(id_compra=len(self.compras) + 1,usuario= self.usuario, producto=self.producto, nuevaDireccion=direccion, cant=cantidad, imagen_path=self.producto.imagen_path)
 
         self.compras.append(nueva_compra)  # Almacenar la compra en la lista de compras
          # Generar el ticket
@@ -179,11 +191,23 @@ class PanelRealizarCompra(tk.Frame):
 
         # Confirmar la compra y mostrar el mensaje
         messagebox.showinfo("Compra Exitosa", f"Has comprado {cantidad} unidades de {self.producto.nombre} por ${total_precio:.2f}")
+        respuesta = messagebox.askyesno("Confirmación", "¿Deseas ver el ticket de compra?")
+        print(f"Respuesta: {respuesta}") 
+
+
+      
+        if respuesta:
+            from principal.panelTickets import PanelTickets
+            print("Redirigiendo a PanelTickets...")
+            self.master.show_panel(PanelTickets,self.usuario)
+        else:
+            
 
 
         # Regresar al panel de productos
-        from principal.panelProductos import PanelProductos
-        self.master.show_panel(PanelProductos,self.usuario)
+            from principal.panelProductos import PanelProductos
+            print("Redirigiendo a PanelProductos...")
+            self.master.show_panel(PanelProductos,self.usuario)
 
     def cancelar_compra(self):
         """
@@ -196,12 +220,25 @@ class PanelRealizarCompra(tk.Frame):
         Muestra una caja para ingresar un nuevo método de pago.
         """
         nuevo_metodo = simpledialog.askstring("Cambiar método de pago", "Ingresa el nuevo número de tarjeta:")
+        nueva_fecha = simpledialog.askstring("Cambiar método de pago", "Ingresa el la fecha de fencimineto MM/YY:")
+        nuevo_Cvv = simpledialog.askstring("Cambiar método de pago", "Ingresa el cvv:")
         
         if nuevo_metodo:
             # Validar si el número ingresado es válido
             if not nuevo_metodo.isdigit() or len(nuevo_metodo) != 16:
                 messagebox.showerror("Error", "Número de tarjeta no válido. Debe ser un número de 16 dígitos.")
                 return
+        if nuevo_Cvv:
+            if not nuevo_Cvv.isdigit() or len(nuevo_Cvv) != 3:
+                messagebox.showerror("Error", "El cvv debe contener 3 digitos")
+                return
+        if not self.validar_fecha(nueva_fecha):
+
+            if not nueva_fecha:
+                messagebox.showerror("Error", "el formato debe se MM/YY")
+                return 
+        
+
 
             # Actualizar el número de tarjeta del usuario
             self.usuario.numero_tarjeta = nuevo_metodo
@@ -209,6 +246,12 @@ class PanelRealizarCompra(tk.Frame):
             # Actualizar la etiqueta de la tarjeta de crédito
             self.numeroTarjeta_var.set(f"Realizar compra con la tarjeta: {self.usuario.numero_tarjeta}")
             messagebox.showinfo("Éxito", "El método de pago ha sido actualizado con éxito.")
+    def validar_fecha(self, fecha):
+        # Expresión regular para validar el formato MM/YY
+        regex = r"^(0[1-9]|1[0-2])\/\d{2}$"
+        if re.match(regex, fecha):
+            return True
+        return False        
     def generar_ticket(self, compra, total_precio):
         """Generar un archivo de ticket con los detalles de la compra."""
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") #guardamos la hora y fecha en la quehicmos la compra
@@ -220,8 +263,10 @@ class PanelRealizarCompra(tk.Frame):
 #tenmos el txt ya generado pero vacio, esto lo escribe y/0 genera extrallendo datos de arreglo compra
         with open(ticket_path, "w", encoding="utf-8") as file:
             file.write("=== TICKET DE COMPRA ===\n")
+            file.write(f"ID de la compra: {compra.get_idcompra()}\n")
             file.write(f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             file.write(f"Usuario: {compra.get_usuario().nombre}\n")
+            
             file.write(f"Producto: {compra.get_producto().nombre}\n")
             file.write(f"Cantidad: {compra.get_cant()}\n")
             file.write(f"Precio unitario: ${compra.get_producto().precio:.2f}\n")
@@ -231,4 +276,4 @@ class PanelRealizarCompra(tk.Frame):
             file.write("========================\n")
         
         # Notificar al usuario
-        messagebox.showinfo("Ticket Generado", f"Se generó un ticket de compra en: {ticket_path}")        
+        #messagebox.showinfo("Ticket Generado", f"Se generó un ticket de compra en: {ticket_path}")        

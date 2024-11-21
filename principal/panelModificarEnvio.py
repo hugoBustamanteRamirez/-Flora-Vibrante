@@ -12,9 +12,25 @@ class PanelModificarEstadoEnvio(tk.Frame):
 
         title_label = tk.Label(self, text="Modificar Estado de Envío", font=("Arial", 16, "bold"), bg="#d6c9b1", padx=20, pady=10)
         title_label.pack(pady=10)
+        
+        # Contenedor con Canvas y Scrollbar
+        container = tk.Frame(self)
+        container.pack(expand=True, fill="both", padx=10, pady=10)
 
-        self.compras_frame = tk.Frame(self, bg="#d6c9b1")
-        self.compras_frame.pack(expand=True, fill="both", padx=10, pady=10)
+        # Crear el Canvas y el Scrollbar
+        self.canvas = tk.Canvas(container, bg="#d6c9b1")
+        self.canvas.pack(side="top", fill="both", expand=True)
+
+        scrollbar_horizontal = tk.Scrollbar(container, orient="horizontal", command=self.canvas.xview)
+        scrollbar_horizontal.pack(side="bottom", fill="x")  # Coloca el scroll en la parte inferior
+
+        # Frame interno dentro del Canvas
+        self.compras_frame = tk.Frame(self.canvas, bg="#d6c9b1")
+        self.compras_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+
+        # Vincular el Canvas al Frame
+        self.canvas.create_window((0, 0), window=self.compras_frame, anchor="nw")
+        self.canvas.configure(xscrollcommand=scrollbar_horizontal.set)  # Conexión al scroll horizontal
 
         columnas = ["Usuario", "Producto", "Cantidad", "Precio Total", "Estado Envío", "Modificar Estado"]
         for col_num, columna in enumerate(columnas):
@@ -51,7 +67,6 @@ class PanelModificarEstadoEnvio(tk.Frame):
             tk.Label(self.compras_frame, text=cantidad, font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=2, padx=10, pady=5)
             tk.Label(self.compras_frame, text=f"${precio_total:.2f}", font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=3, padx=10, pady=5)
             tk.Label(self.compras_frame, text=estado_envio, font=("Arial", 12), bg="#d6c9b1").grid(row=row_num, column=4, padx=10, pady=5)
-
             # Modificar estado de envío
             if self.usuario.rol == 1:  # Si es admin, puede cambiar el estado
                 estado_combobox = ttk.Combobox(self.compras_frame, values=["En proceso de envío","Pago REcibido","etc", "Enviado", "Entregado"], state="readonly")
