@@ -1,0 +1,11 @@
+=== TICKET DE COMPRA ===
+Fecha: 2024-11-20 18:22:41
+Usuario: karol
+Producto: paraiso azul
+Cantidad: 1
+Precio unitario: $34.00
+Total: $34.00
+Dirección de envío:
+mesa de cedano, zitacuaro, CDMX, , CP: 61222
+Estado de envío: 
+========================

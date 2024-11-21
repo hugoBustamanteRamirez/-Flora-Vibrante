@@ -26,15 +26,19 @@ from principal.panelModificarEnvio import PanelModificarEstadoEnvio
 class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Florerías bornay")
+        self.title("Florerías bornay") #establecemos el nombre de la app
+        #tomamos las medias de nuestra pantalla y con self.geometry dibujamos la ventana
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         self.geometry(f"{screen_width}x{screen_height}")
+
+        #variables globales donde inicializamos, esto para hacer recursividad para reutilizar lo mas que se pueda y no perder datos
+
         self.usuario_logueado = None
         self.producto_seleccionado = None
         self.usuario_actual = None
 
-        
+        #creacion y llenado de los arreglos usuarios,productos y compras(donde se encuentran dichas clases? en modelo)
         self.usuarios = [
             Usuario("admin", "1234","La joya ", "9876 5432 1098 7654", "11/23", "456",7000,rol=1),
             Usuario("karol", "1234","La palma", "1234 5678 9012 3456", "12/25", "123",7000,rol=0,),
@@ -54,13 +58,14 @@ class MainApp(tk.Tk):
               Compra(usuario=self.usuarios[0],producto=self.productos[0],nuevaDireccion="Calle Siempre Viva 123",cant=2,total=self.productos[0].precio * 2,edoEnvio="En camino"),
 
          ]
+        #inicializamos nuestra variable  self.current_panel por que esta cambiara a lo largo de la ejecucion 
         self.current_panel = None
-         
+         #mostramos el panel por defecto, si o si al ejecutar la app esta sera la primera que se muestre
         self.show_panel(PanelLogin) 
         
-
+#funcion que ayuda al cambiar de panelees
     def show_panel(self, panel_class,*args, **kwargs):
-       
+       #elimina nuestro panel en el que estamos si cambiamos de panel(opcion)
         if self.current_panel:
             self.current_panel.pack_forget()
             self.current_panel.destroy()
@@ -105,8 +110,9 @@ class MainApp(tk.Tk):
 
         
 
-        self.current_panel.pack(expand=True, fill="both")
-    
+        self.current_panel.pack(expand=True, fill="both")#posicioneas o colocamos nuestro panel dentro de la ventana
+   
+    # ir a on_login_succes antes de ver esta funcion
     def crear_menu(self):
         self.config(menu=None)
         
@@ -170,23 +176,27 @@ class MainApp(tk.Tk):
 
        
     
-       
+    #esta funcion nos ayudara a indentificar el y que usuario esta con la session, y de acuerdo al rol se creara la funcion crear_menu(), dentro de 
+    # esta funcion crar_menu() estara la logica para mostrar las opciones deacuerdo al rol del usuario   
     def on_login_success(self, user):
-        self.usuario_logueado = user  
-        self.crear_menu()  
-        self.show_panel(PanelRegistrarCmpra, self.productos, self.usuario_logueado)  
+        self.usuario_logueado = user #usamos nuestra variable globlal para capturar al usuario que ha iniciado sesion 
+        self.crear_menu() #ir ahora si a la funcion de arriba 
+        self.show_panel(PanelRegistrarCmpra, self.productos, self.usuario_logueado) #mostramos este panel 
         messagebox.showinfo("Login exitoso", f"Bienvenido, {user.get_nombre()}")
         print(f"Rol del usuario logueado: {user.rol}")
-        producto_seleccionado = self.productos[0]
+        producto_seleccionado = self.productos[0] #nos ayudara a sabaer que producto se selecciono cuando dan click en comprar 
         #self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado)  # Muestra el panel de compra
         #self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras)
-        self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras)
+        self.show_panel(PanelRealizarCompra, producto_seleccionado, self.usuario_logueado, self.compras) #se muestra ese panel
 
     def ivitado(self):
         self.crear_menu()  
         
 
 
+#esta funcion se llama en las opciones cerrar sesion que como su nombre lo dice cerramos la sesion
+#basicamente es asignarle nada nuestra ariable self.usuario_logueado, asi como borrar el menu(no lo hace jaja), destruimos o borrramos el panel en elque estamos
+# y nos redirige al panel login
     def logout(self):
         self.usuario_logueado = None
 
@@ -199,7 +209,7 @@ class MainApp(tk.Tk):
             self.current_panel = None
 
         self.show_panel(PanelLogin)
-
+#creamos la estancia de esta misma clase,la definimoos como nuestra clase principal
 if __name__ == "__main__":
     app = MainApp()
     app.mainloop()

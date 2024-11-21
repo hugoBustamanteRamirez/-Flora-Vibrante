@@ -2,12 +2,13 @@ import tkinter as tk
 from tkinter import messagebox
 from modelo.Usuario import Usuario
 from principal.panelProductos import PanelProductos
+#esta clase recibe como parametros a los usuarios,por que?  para registrarlo en nuestro arreglo usarios
 
 class PanelRegistrarUsuario(tk.Frame):
     def __init__(self, parent, usuarios):
         super().__init__(parent)
-        self.usuarios = usuarios  
-        self.configure(bg="#d6c9b1") 
+        self.usuarios = usuarios  #usamos nuestra variable global para guardar el usaurio 
+        self.configure(bg="#d6c9b1")  #nada ps el color, background de el panel
 
 
         

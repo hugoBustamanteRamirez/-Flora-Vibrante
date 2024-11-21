@@ -1,0 +1,7 @@
+=== TICKET DE COMPRA ===
+Fecha: 2024-11-20 18:21:58
+Usuario: karol
+Producto: paraiso azul
+Cantidad: 1
+Precio unitario: $34.00
+Total: $34.00

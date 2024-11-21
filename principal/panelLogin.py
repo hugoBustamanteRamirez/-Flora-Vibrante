@@ -85,6 +85,8 @@ def invitado(self):
         command=lambda: self.main_app.show_panel(PanelProductos),
     )
     start_button.place(relx=0.5, rely=0.6, anchor="w")
+
+    #cargamos la imagen en el panel,escalandola
 def load_background(root, img_path):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()

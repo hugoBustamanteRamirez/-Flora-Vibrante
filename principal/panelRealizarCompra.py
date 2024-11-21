@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox,ttk
 from modelo.Compra import Compra
 from tkinter import simpledialog, messagebox
+import os
+from datetime import datetime
 #from principal.panelProductos import producto_seleccionado, usuario_actual
 class PanelRealizarCompra(tk.Frame):
     def __init__(self, parent,producto, usuario,compras):
@@ -172,6 +174,8 @@ class PanelRealizarCompra(tk.Frame):
         nueva_compra = Compra(self.usuario, self.producto, nuevaDireccion=direccion, cant=cantidad, imagen_path=self.producto.imagen_path)
 
         self.compras.append(nueva_compra)  # Almacenar la compra en la lista de compras
+         # Generar el ticket
+        self.generar_ticket(nueva_compra, total_precio)
 
         # Confirmar la compra y mostrar el mensaje
         messagebox.showinfo("Compra Exitosa", f"Has comprado {cantidad} unidades de {self.producto.nombre} por ${total_precio:.2f}")
@@ -205,3 +209,26 @@ class PanelRealizarCompra(tk.Frame):
             # Actualizar la etiqueta de la tarjeta de crédito
             self.numeroTarjeta_var.set(f"Realizar compra con la tarjeta: {self.usuario.numero_tarjeta}")
             messagebox.showinfo("Éxito", "El método de pago ha sido actualizado con éxito.")
+    def generar_ticket(self, compra, total_precio):
+        """Generar un archivo de ticket con los detalles de la compra."""
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S") #guardamos la hora y fecha en la quehicmos la compra
+        ticket_dir = "tickets" #la carpeta doende se guardaran los tickets
+        os.makedirs(ticket_dir, exist_ok=True)  # Crear la carpeta si no existe
+        ticket_path = os.path.join(ticket_dir, f"ticket_{timestamp}.txt") #formamos la ruta,osea tickets/ticket_{timestamp}
+
+
+#tenmos el txt ya generado pero vacio, esto lo escribe y/0 genera extrallendo datos de arreglo compra
+        with open(ticket_path, "w", encoding="utf-8") as file:
+            file.write("=== TICKET DE COMPRA ===\n")
+            file.write(f"Fecha: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            file.write(f"Usuario: {compra.get_usuario().nombre}\n")
+            file.write(f"Producto: {compra.get_producto().nombre}\n")
+            file.write(f"Cantidad: {compra.get_cant()}\n")
+            file.write(f"Precio unitario: ${compra.get_producto().precio:.2f}\n")
+            file.write(f"Total: ${total_precio:.2f}\n")
+            file.write(f"Dirección de envío:\n{compra.get_nuevaDireccion()}\n")
+            file.write(f"Estado de envío: {compra.get_edoEnvio()}\n")
+            file.write("========================\n")
+        
+        # Notificar al usuario
+        messagebox.showinfo("Ticket Generado", f"Se generó un ticket de compra en: {ticket_path}")        
